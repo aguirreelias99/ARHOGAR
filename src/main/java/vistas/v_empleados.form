@@ -58,7 +58,7 @@
                       <Component id="tf_direccion" alignment="0" max="32767" attributes="0"/>
                       <Component id="tf_apellido" alignment="0" max="32767" attributes="0"/>
                       <Component id="tf_nom" alignment="0" max="32767" attributes="0"/>
-                      <Component id="tf_empleado" alignment="0" min="-2" pref="56" max="-2" attributes="0"/>
+                      <Component id="tf_id" alignment="0" min="-2" pref="56" max="-2" attributes="0"/>
                       <Component id="tf_ci" alignment="0" max="32767" attributes="0"/>
                       <Component id="tf_cargo" max="32767" attributes="0"/>
                   </Group>
@@ -72,7 +72,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="tf_empleado" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tf_id" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="9" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -145,11 +145,12 @@
             <Property name="text" type="java.lang.String" value="CARGO"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="tf_empleado">
+        <Component class="javax.swing.JTextField" name="tf_id">
           <Events>
-            <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="tf_empleadoFocusGained"/>
-            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="tf_empleadoFocusLost"/>
-            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tf_empleadoKeyTyped"/>
+            <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="tf_idFocusGained"/>
+            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="tf_idFocusLost"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tf_idActionPerformed"/>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tf_idKeyTyped"/>
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="tf_ci">

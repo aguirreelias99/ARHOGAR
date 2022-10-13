@@ -52,7 +52,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="tf_monto_cuota" max="32767" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="tf_prod_fin" min="-2" pref="56" max="-2" attributes="0"/>
+                          <Component id="tf_id" min="-2" pref="56" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="158" max="32767" attributes="0"/>
                       </Group>
                       <Component id="tf_cant_cuotas" alignment="0" max="32767" attributes="0"/>
@@ -67,7 +67,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="tf_prod_fin" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tf_id" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -100,11 +100,11 @@
             <Property name="text" type="java.lang.String" value="MONTO DE CUOTAS"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="tf_prod_fin">
+        <Component class="javax.swing.JTextField" name="tf_id">
           <Events>
-            <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="tf_prod_finFocusGained"/>
-            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="tf_prod_finFocusLost"/>
-            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tf_prod_finKeyTyped"/>
+            <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="tf_idFocusGained"/>
+            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="tf_idFocusLost"/>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tf_idKeyTyped"/>
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="tf_cant_cuotas">

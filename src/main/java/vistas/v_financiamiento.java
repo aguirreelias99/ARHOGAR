@@ -5,6 +5,8 @@
  */
 package vistas;
 
+import controlador.tableController;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
@@ -46,7 +48,7 @@ public class v_financiamiento extends javax.swing.JInternalFrame implements miIn
     }
 
      private void setData(){
-        myData.put("id_producto",tf_prod_fin.getText());
+        myData.put("id_producto",tf_id.getText());
         myData.put("cantidad_cuota",tf_cant_cuotas.getText() );
         myData.put("monto_cuota",tf_monto_cuota.getText());
 
@@ -56,6 +58,10 @@ public class v_financiamiento extends javax.swing.JInternalFrame implements miIn
         myData.put("id_producto","");
         myData.put("cantidad_cuota","");
         myData.put("monto_cuota","");
+        
+        tf_id.setText("0");
+        tf_cant_cuotas.setText("");
+        tf_monto_cuota.setText("");
 
     }
     
@@ -65,7 +71,7 @@ public class v_financiamiento extends javax.swing.JInternalFrame implements miIn
             String value = entry.getValue();
             switch(key){
                 case"id_producto":
-                    tf_prod_fin.setText(value);
+                    tf_id.setText(value);
                     break;
                 case "cantidad_cuota":
                     tf_cant_cuotas.setText(value);
@@ -90,7 +96,7 @@ public class v_financiamiento extends javax.swing.JInternalFrame implements miIn
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        tf_prod_fin = new javax.swing.JTextField();
+        tf_id = new javax.swing.JTextField();
         tf_cant_cuotas = new javax.swing.JTextField();
         tf_monto_cuota = new javax.swing.JTextField();
 
@@ -106,17 +112,17 @@ public class v_financiamiento extends javax.swing.JInternalFrame implements miIn
 
         jLabel3.setText("MONTO DE CUOTAS");
 
-        tf_prod_fin.addFocusListener(new java.awt.event.FocusAdapter() {
+        tf_id.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                tf_prod_finFocusGained(evt);
+                tf_idFocusGained(evt);
             }
             public void focusLost(java.awt.event.FocusEvent evt) {
-                tf_prod_finFocusLost(evt);
+                tf_idFocusLost(evt);
             }
         });
-        tf_prod_fin.addKeyListener(new java.awt.event.KeyAdapter() {
+        tf_id.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                tf_prod_finKeyTyped(evt);
+                tf_idKeyTyped(evt);
             }
         });
 
@@ -140,7 +146,7 @@ public class v_financiamiento extends javax.swing.JInternalFrame implements miIn
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(tf_monto_cuota)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(tf_prod_fin, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(tf_id, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 158, Short.MAX_VALUE))
                     .addComponent(tf_cant_cuotas))
                 .addContainerGap())
@@ -151,7 +157,7 @@ public class v_financiamiento extends javax.swing.JInternalFrame implements miIn
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(tf_prod_fin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tf_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tf_cant_cuotas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -177,25 +183,25 @@ public class v_financiamiento extends javax.swing.JInternalFrame implements miIn
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tf_prod_finFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_prod_finFocusGained
+    private void tf_idFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_idFocusGained
         // TODO add your handling code here:
         this.currentField = "id_producto";
-        this.tf_prod_fin.selectAll();
-    }//GEN-LAST:event_tf_prod_finFocusGained
+        this.tf_id.selectAll();
+    }//GEN-LAST:event_tf_idFocusGained
 
-    private void tf_prod_finFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_prod_finFocusLost
+    private void tf_idFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_idFocusLost
         // TODO add your handling code here:
         this.currentField = "id_producto";
-    }//GEN-LAST:event_tf_prod_finFocusLost
+    }//GEN-LAST:event_tf_idFocusLost
 
-    private void tf_prod_finKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_prod_finKeyTyped
+    private void tf_idKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_idKeyTyped
 
         if (evt.getKeyChar()=='\n') {
             this.imBuscar();
         }
         // TODO add your handling code here:
 
-    }//GEN-LAST:event_tf_prod_finKeyTyped
+    }//GEN-LAST:event_tf_idKeyTyped
 
     private void tf_cant_cuotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_cant_cuotasActionPerformed
         // TODO add your handling code here:
@@ -208,8 +214,8 @@ public class v_financiamiento extends javax.swing.JInternalFrame implements miIn
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField tf_cant_cuotas;
+    private javax.swing.JTextField tf_id;
     private javax.swing.JTextField tf_monto_cuota;
-    private javax.swing.JTextField tf_prod_fin;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -217,71 +223,86 @@ public class v_financiamiento extends javax.swing.JInternalFrame implements miIn
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
+       @Override
     public void imGrabar() {
-        int id, rows = 0;
-        id = Integer.parseInt(tf_prod_fin.getText());
-        if(id>0){
-            this.imActualizar();
-            return;
-            
+        
+           int id,rows = 0;
+        id = Integer.parseInt(tf_id.getText());
+        if (id>0){
+        this.imActualizar();
+       
+        return;
         }
         this.setData();
         rows = this.tc.createReg(this.myData);
         this.fillView(myData);
+        String msg = "SE CREÓ EL NUEVO REGISTRO: "+tf_id.getText();
+            System.out.println(msg);
+            JOptionPane.showMessageDialog(this, msg, "ATENCIÓN...!", JOptionPane.OK_OPTION);
     }
 
     @Override
     public void imActualizar() {
-
-        System.out.println("V imActualizar");
+ System.out.println("V imActualizar");
         this.setData();
-        int rows = this.tc.updateReg(myData);
-        this.resetData();
-        this.fillView(myData);
+        ArrayList<Map<String,String>> alCabecera;         //Declara array de Map, cada Map es para un registro
+        alCabecera = new ArrayList<Map<String,String>>(); //Instancia array
+        alCabecera.add(myData);                           //agrega el Map al array, para la cabecera será el mejor de los casos, es decir 1 registro 
+       int rowsAffected = this.tc.updateReg(alCabecera); //Está guardando igual si en el detalle hay error
+        String msg = "SE HA ACTUALIZADO EXITOSAMENTE EL REGISTRO: "+tf_id.getText();
+            System.out.println(msg);
+            JOptionPane.showMessageDialog(this, msg, "ATENCIÓN...!", JOptionPane.OK_OPTION);
     }
+    
 
     @Override
     public void imBorrar() {
 
-        this.setData();
-        int rows = this.tc.deleteReg(tf_prod_fin.getText());
-        if(rows<=0){
-            msg = "No se ha podido eliminar el registro: "+tf_prod_fin.getText();
+       this.setData();
+        ArrayList<Map<String,String>> alRegister;              //Declara un Array de Map
+        alRegister = new ArrayList<Map<String,String>>();      //Instancia el array
+        alRegister.add(myData);                                //Agregamos el map en el array
+        int b =   this.tc.deleteReg(alRegister);               //Invocamos el método deleteReg del Modelo que procesa un array
+        //int b =   this.tc.deleteReg(tf_id_marca.getText());
+       if(b<=0) {
+            String msg = "NO SE HA PODIDO ELIMINAR EL REGISTRO: "+tf_id.getText();
             System.out.println(msg);
-            JOptionPane.showMessageDialog(this, msg, "¡Atencion...!", JOptionPane.OK_OPTION);
-            
-            
-        }
-        if (rows>0){
-            msg = "EL registro: "+tf_prod_fin.getText()+" se ha eliminado correctamente";
+            JOptionPane.showMessageDialog(this, msg, "ATENCIÓN...!", JOptionPane.OK_OPTION);
+            return; 
+       }
+       if (b>0){
+            String msg = "EL REGISTRO: "+tf_id.getText()+" SE HA ELIMINADO CORRECTAMENTE";
             System.out.println(msg);
-            JOptionPane.showMessageDialog(this, msg, "¡Atención...!", JOptionPane.YES_OPTION);
-        }
-        this.resetData();
-        this.fillView(myData);
+            JOptionPane.showMessageDialog(this, msg, "ATENCIÓN...!", JOptionPane.OK_OPTION);
+       }
+       this.resetData();
+       this.fillView(myData);
     }
 
     @Override
     public void imNuevo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    resetData();
     }
 
     @Override
     public void imBuscar() {
-        this.setData();
-        //Aqui podriamos verificar que tfid no sea cero
-        this.myData = this.tc.searchById(this.myData);
-        //también aqui se podría verificar que traiga los datos, sino invocar resteData  antes del fill
+    this.setData();
+        myData = tc.searchById(this.myData);
+        if(this.myData.size() <=0){
+            String msg = "NO SE HA PODIDO RECUPERAR EL REGISTRO: "+tf_id.getText();
+            this.resetData();
+            JOptionPane.showMessageDialog(this, msg, "ATENCIÓN...!", JOptionPane.OK_OPTION);
+        }
         this.fillView(myData);
-             
+        System.out.println("V imBuscar myData: "+myData.toString());
     }
 
     @Override
     public void imPrimero() {
         this.setData();
         //en este caso el id no importa, pero se pasa para tener unificado el formato
-        this.myData = this.tc.navegationReg(tf_prod_fin.getText(),"FIRST");
+        this.myData = this.tc.navegationReg(tf_id.getText(),"FIRST");
         this.fillView(this.myData);
     }
 
@@ -289,7 +310,7 @@ public class v_financiamiento extends javax.swing.JInternalFrame implements miIn
     public void imSiguiente() {
         this.setData();
         //en este caso el id SI importa
-        this.myData = this.tc.navegationReg(tf_prod_fin.getText(),"NEXT");
+        this.myData = this.tc.navegationReg(tf_id.getText(),"NEXT");
         this.fillView(this.myData);
     }
 
@@ -297,7 +318,7 @@ public class v_financiamiento extends javax.swing.JInternalFrame implements miIn
     public void imAnterior() {
         this.setData();
         //en este caso el id SI importa
-        this.myData = this.tc.navegationReg(tf_prod_fin.getText(),"PRIOR");
+        this.myData = this.tc.navegationReg(tf_id.getText(),"PRIOR");
         this.fillView(this.myData);
     }
 
@@ -305,7 +326,7 @@ public class v_financiamiento extends javax.swing.JInternalFrame implements miIn
     public void imUltimo() {
         this.setData();
         //en este caso el id no importa, pero se pasa para tener unificado el formato
-        this.myData = this.tc.navegationReg(tf_prod_fin.getText(),"LAST");
+        this.myData = this.tc.navegationReg(tf_id.getText(),"LAST");
         this.fillView(this.myData);
     }
 

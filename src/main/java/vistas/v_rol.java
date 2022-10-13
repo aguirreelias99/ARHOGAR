@@ -6,9 +6,11 @@
 package vistas;
 
 
+import controlador.tableController;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
@@ -61,6 +63,9 @@ private String msg;
     private void resetData(){
         myData.put("id","0");
         myData.put("descripcion","");
+        
+        tf_id.setText("0");
+        tf_descripcion.setText("");
     }
        
     private void fillView(Map<String, String> data){
@@ -225,66 +230,80 @@ private String msg;
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
+        @Override
     public void imGrabar() {
-        int id, rows = 0;
+        
+           int id,rows = 0;
         id = Integer.parseInt(tf_id.getText());
-        if(id>0){
-            this.imActualizar();
-            return;
-            
+        if (id>0){
+        this.imActualizar();
+       
+        return;
         }
         this.setData();
         rows = this.tc.createReg(this.myData);
         this.fillView(myData);
+        String msg = "SE CREÓ EL NUEVO REGISTRO: "+tf_id.getText();
+            System.out.println(msg);
+            JOptionPane.showMessageDialog(this, msg, "ATENCIÓN...!", JOptionPane.OK_OPTION);
     }
 
     @Override
     public void imActualizar() {
-
-        System.out.println("V imActualizar");
+ System.out.println("V imActualizar");
         this.setData();
-        int rows = this.tc.updateReg(myData);
-        this.resetData();
-        this.fillView(myData);
+        ArrayList<Map<String,String>> alCabecera;         //Declara array de Map, cada Map es para un registro
+        alCabecera = new ArrayList<Map<String,String>>(); //Instancia array
+        alCabecera.add(myData);                           //agrega el Map al array, para la cabecera será el mejor de los casos, es decir 1 registro 
+       int rowsAffected = this.tc.updateReg(alCabecera); //Está guardando igual si en el detalle hay error
+        String msg = "SE HA ACTUALIZADO EXITOSAMENTE EL REGISTRO: "+tf_id.getText();
+            System.out.println(msg);
+            JOptionPane.showMessageDialog(this, msg, "ATENCIÓN...!", JOptionPane.OK_OPTION);
     }
+    
 
     @Override
     public void imBorrar() {
 
-        this.setData();
-        int rows = this.tc.deleteReg(tf_id.getText());
-        if(rows<=0){
-            msg = "No se ha podido eliminar el registro: "+tf_id.getText();
+       this.setData();
+        ArrayList<Map<String,String>> alRegister;              //Declara un Array de Map
+        alRegister = new ArrayList<Map<String,String>>();      //Instancia el array
+        alRegister.add(myData);                                //Agregamos el map en el array
+        int b =   this.tc.deleteReg(alRegister);               //Invocamos el método deleteReg del Modelo que procesa un array
+        //int b =   this.tc.deleteReg(tf_id_marca.getText());
+       if(b<=0) {
+            String msg = "NO SE HA PODIDO ELIMINAR EL REGISTRO: "+tf_id.getText();
             System.out.println(msg);
-            JOptionPane.showMessageDialog(this, msg, "¡Atencion...!", JOptionPane.OK_OPTION);
-            
-            
-        }
-        if (rows>0){
-            msg = "EL registro: "+tf_id.getText()+" se ha eliminado correctamente";
+            JOptionPane.showMessageDialog(this, msg, "ATENCIÓN...!", JOptionPane.OK_OPTION);
+            return; 
+       }
+       if (b>0){
+            String msg = "EL REGISTRO: "+tf_id.getText()+" SE HA ELIMINADO CORRECTAMENTE";
             System.out.println(msg);
-            JOptionPane.showMessageDialog(this, msg, "¡Atención...!", JOptionPane.YES_OPTION);
-        }
-        this.resetData();
-        this.fillView(myData);
+            JOptionPane.showMessageDialog(this, msg, "ATENCIÓN...!", JOptionPane.OK_OPTION);
+       }
+       this.resetData();
+       this.fillView(myData);
     }
 
     @Override
     public void imNuevo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        resetData();
     }
 
     @Override
     public void imBuscar() {
-        this.setData();
-        //Aqui podriamos verificar que tfid no sea cero
-        this.myData = this.tc.searchById(this.myData);
-        //también aqui se podría verificar que traiga los datos, sino invocar resteData  antes del fill
+    this.setData();
+        myData = tc.searchById(this.myData);
+        if(this.myData.size() <=0){
+            String msg = "NO SE HA PODIDO RECUPERAR EL REGISTRO: "+tf_id.getText();
+            this.resetData();
+            JOptionPane.showMessageDialog(this, msg, "ATENCIÓN...!", JOptionPane.OK_OPTION);
+        }
         this.fillView(myData);
-             
+        System.out.println("V imBuscar myData: "+myData.toString());
     }
-
     @Override
     public void imPrimero() {
         this.setData();

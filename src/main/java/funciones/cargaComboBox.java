@@ -1,18 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package funciones;
+
 import java.sql.*;
 import javax.swing.JOptionPane;
 import modelo.conexion;
+
 /**
  *
- * @author Admin
+ * @author user
  */
 public class cargaComboBox {
-   public static int x = 400, y = 400;
+    public static int x = 400, y = 400;
     public static String ls_sql = "";
     public static ResultSet rs_tabla;
     public static int li_cant, li_ind = 0;
@@ -90,5 +87,5 @@ public class cargaComboBox {
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "No se pudo recuperar el registro. - ERROR: " + erro);
         }
-    } 
+    }
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package modelo;
 
 import funciones.functions;
@@ -14,7 +9,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,7 +26,8 @@ public class tableModel {
     private ArrayList<String> columnTypes;
     //Claves primarias de la tabla
     private ArrayList<String> tableKeys;
-    
+    //private HashMap<String, String> Data;
+    List<Object> Data; //= new ArrayList <Object>();
     
     /**
      * Constructor que recibe el nombre de la tabla a la que representará la clase
@@ -43,9 +38,9 @@ public class tableModel {
         this.columnNames = conexion.getColumnNames(tableName);
         this.columnTypes = conexion.getColumnTypes(tableName);
         this.tableKeys = conexion.getKeyColumns(tableName, "PRI");
+        this.Data = new ArrayList <Object>();
     }//fin constructor
     
-
     /**
      * Método que construye y ejecuta la sentencia sql de INSERT.
      * @param viewRegister Map de pares campo-valor enviado desde la vista
@@ -61,23 +56,56 @@ public class tableModel {
         sql += ") VALUES (";
         sql += this.createValueListString(viewRegister, ",");        
         sql += ")";
-        rtn = conexion.ejecuteUPD(sql);
-        return rtn;
+        rtn = conexion.ejecuteUPD(sql); //Retorna canitdad de filas afectadas
+        return rtn; 
     }//fin saveRegister
     
+    public List<Object> getData(){
+        return this.Data;
+    }
+    public void setData(List<Object> data){
+        this.Data = data;
+    }
     /**
      * Prepara y ejecuta sentencia sql para actualizar (UPDATE) los datos en la tabla
      * @param viewRegister Map que contiene el par campo-valor de los campos que no son clave primaria
      * @param conditions Map que contiene el par campo-valor de los campos clave primaria de la tabla
      * @return rtn int cantidad de filas afectadas
      */
-    public int updateRegister(Map<String, String> viewRegister, Map<String, String> conditions){
+    public int updateRegister(Map<String, String> keys){
         int rtn = 0;
         String sql;
         sql = "";
-        sql += this.createUpdateSQL(viewRegister, conditions);
-        rtn = conexion.ejecuteUPD(sql);
-        return rtn;
+        //Primero v
+        sql="UPDATE " + this.tableName + " SET ";
+        ArrayList<ArrayList<String>> aList; 
+        aList = new ArrayList<ArrayList<String>>();    //Crear lista
+        ArrayList<String> aRow;                        //Declara cada registro de la lista que serán 3 [key, comparation, value]
+        
+        for(String key : this.tableKeys){              //Recorre todos los primary key
+            if(keys.containsKey(key)){
+                String v = keys.get(key);              //Recupera el valor correspondiente al key, sino existe devuelve una cadena vacía ""
+                //System.out.println("V "+v);
+                if(!v.equals("")){                     //Si no está vacía entonces
+                    aRow = new ArrayList<String>();    //se crea una nueva instancia de array con elementos tipo String
+                    aRow.add(key);                     //donde se ingrsa como elemento 0 el id
+                    aRow.add("=");                     //segundo elemento el comparador   
+                    aRow.add(keys.get(key));           //tercer elemento el valor
+                    aList.add(aRow);                   //y se almacena en el array de array
+
+                    keys.remove(key);                  //Quita primary key del Map para no formar parte del SET en la sentencia
+                }
+            } 
+        }
+         //System.out.println("= = = = = = = = nuevo keys antes "+keys);
+        keys = this.justTableFields(keys, false);   //dejar sólo los keys que se corresponden con los campos de la tabla
+        //System.out.println("= = = =  = = = = = = =nuevo keys despues "+keys);
+        sql += createKeyValueList(keys, ",");      //Crea String tipo (key=value, key=value)
+        sql += createWhereClause3(aList);          //Se pasa el array al método para que cree la clausula WHERE
+        System.out.println("SQL Model 105  : "+sql);
+        rtn = conexion.ejecuteUPD(sql);            //se ejecuta la consulta update contra la bd
+
+        return rtn;                                //retornamos la cantidad de filas afectadas
     }//fin updateRegister
     
     /**
@@ -85,25 +113,34 @@ public class tableModel {
      * @param id el código del restro a ser eliminado pasado desde la vista.
      * @return rtn int cantidad de las filas afectadas.
      */
-    public int deleteRegister(String id){
+    public int deleteRegister(Map<String, String> keys){
         int rtn = 0;
         //Primero v
         String sql = "";
         sql="DELETE FROM "+this.tableName;
-        ArrayList<ArrayList<String>> aList = new ArrayList<ArrayList<String>>(3);
-        ArrayList<String> aRow;
-        aRow = new ArrayList<String>();
-        aRow.add(this.tableKeys.get(0));
-        aRow.add("=");
-        aRow.add(id);
-        aList.add(aRow);
-        sql += createWhereClause3(aList);
-        rtn = conexion.ejecuteUPD(sql);
-        return rtn;
+        ArrayList<ArrayList<String>> aList; 
+        aList = new ArrayList<ArrayList<String>>(); //Crear lista
+        ArrayList<String> aRow; //Declara cada registro de la lista que serán 3 [key, comparation, value]
+        
+        for(String key : this.tableKeys){          //Recorre todos los primary key
+            String v = keys.getOrDefault(key, ""); //Recupera el valor correspondiente al key, sino existe devuelve una cadena vacía ""
+            if(!v.equals("")){                     //Si no está vacía entonces
+                aRow = new ArrayList<String>();    //se crea una nueva instancia de array con elementos tipo String
+                aRow.add(key);                     //donde se ingrsa como elemento 0 el id
+                aRow.add("=");                     //segundo elemento el comparador   
+                aRow.add(keys.get(key));           //tercer elemento el valor
+                aList.add(aRow);                   //y se almacena en el array de array
+            }
+        }
+        sql += createWhereClause3(aList);          //Se pasa el array al método para que cree la clausula WHERE
+        //System.out.println("SQL  : "+sql);
+        rtn = conexion.ejecuteUPD(sql);          //se ejecuta la consulta update contra la bd
+        return rtn;                                //retornamos la cantidad de filas afectadas
     }//fin deleteRegister
     
-    public List<Map<String, Object>> readRegister(String group, Map<String, String> fielsToSelect, Map<String, String> conditions, ArrayList<String> orderBy, String order, int limit){
-        List<Map<String, Object>> rtn = null;
+    public ArrayList<Map<String, String>> readRegister(String group, Map<String, String> fielsToSelect, Map<String, String> conditions, ArrayList<String> orderBy, String order, int limit){
+        ArrayList<Map<String, String>> rtn = null;
+        rtn = new ArrayList<Map<String, String>>();
         ResultSet rs;
         //Sólo necesitamos la lista de campos a poner en el select
         ArrayList fields = new ArrayList(fielsToSelect.keySet());
@@ -114,11 +151,43 @@ public class tableModel {
             ResultSetMetaData metaData = rs.getMetaData();
             int colCount = metaData.getColumnCount();
             while(rs.next()){ 
-                Map<String, Object> columns = new HashMap<String, Object>();
-                for (int i = 0; i <= colCount; i++) {
-                  columns.put(metaData.getColumnLabel(i), rs.getObject(i));
+                Map<String, String> mapColumns = new HashMap<String, String>();
+                for (int i = 1; i <= colCount; i++) {
+                  mapColumns.put(metaData.getColumnLabel(i), rs.getString(i));
                 }
-                rtn.add(columns);
+                rtn.add(mapColumns);
+            }   
+        } //fin deleteRegister
+        catch (SQLException ex) {
+            Logger.getLogger(tableModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rtn;
+    }
+    
+    public ArrayList<Map<String, String>> readRegisterList(Map<String, String> fielsToSelect, Map<String, String> conditions){
+        ArrayList<Map<String, String>> rtn = null;
+        rtn = new ArrayList<Map<String, String>>();
+        
+        ResultSet rs;
+        //Sólo necesitamos la lista de campos a poner en el select
+        //System.out.println("fieldselect "+fielsToSelect);
+        //System.out.println("conditions "+conditions);
+        ArrayList fields = new ArrayList(fielsToSelect.keySet());
+        String sql;
+        sql = createReadSQL(fields, conditions);
+        //System.out.println(" tableModel 175 sql "+sql);
+        try {
+            rs = conexion.ejecuteSQL(sql); //Esto devuelve un ResultSet
+            ResultSetMetaData metaData = rs.getMetaData();
+            int colCount = metaData.getColumnCount();
+            while(rs.next()){ 
+                HashMap<String, String> mapColumns = new HashMap<String, String>();
+                for (int i = 1; i <= colCount; i++) {
+                    System.out.println(metaData.getColumnLabel(i));
+                    System.out.println(rs.getString(i));
+                    mapColumns.put(metaData.getColumnLabel(i), rs.getString(i));
+                }
+                rtn.add(mapColumns);
             }   
         } //fin deleteRegister
         catch (SQLException ex) {
@@ -130,18 +199,15 @@ public class tableModel {
     public Map<String, String> readRegisterById(Map<String, String> viewRegister, Map<String, String> conditions){
         Map<String, String> rtn = new HashMap<String, String>();
         ResultSet rs;
+        int rows = 0;
         ArrayList<String> fields = new ArrayList(viewRegister.keySet());
         String sql="";
         sql = createReadSQL(fields, conditions);
-        System.out.println(sql);
-        
+      //  System.out.println("M readRegisterById => "+sql);
         try {
-            
             rs = conexion.ejecuteSQL(sql); //Esto devuelve un ResultSet
             ResultSetMetaData metaData = rs.getMetaData();
             int colCount = metaData.getColumnCount();
-            //System.out.println("columnas "+colCount+"\n");
-            //System.out.println(metaData.toString());
             while(rs.next()){ 
                 for (int i = 1; i <= colCount; i++) {
                     String rsIndx = metaData.getColumnLabel(i);
@@ -149,28 +215,45 @@ public class tableModel {
                         rtn.put(rsIndx, rs.getString(rsIndx));
                     }
                 }
+                rows++;
             }   
         } //fin deleteRegister
         catch (SQLException ex) {
             Logger.getLogger(tableModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+        //System.out.println("M readRegisterById rtn => "+rtn.toString());
+        if (rows == 0){
+            rtn.clear();
+        }
         return rtn;
     }// fin readRegisterById
     
     public Map<String, String> readNavetionReg (String id, String goTo){
+        int rows = 0;
         Map<String, String> rtn = new HashMap<String, String>();
         ResultSet rs;
         String sql;
         int row=1;
         sql = createNavegateSQL(id, goTo);
+        //System.out.println("model 233 readNav "+sql);
         try {
             rs = conexion.ejecuteSQL(sql); //Esto devuelve un ResultSet
+            //System.out.println("model 236  ");
             ResultSetMetaData metaData = rs.getMetaData();
+            //System.out.println("model 238  ");
             int colCount = metaData.getColumnCount();
+            //System.out.println("model 240 colCount "+colCount);
             while(rs.next()){
-                for (int col = 1; col <= colCount; col++) {
+                for (int col = 1; col < colCount; col++) {
+                    //System.out.println("column : "+metaData.getColumnName(col)+ " value : "+rs.getString(metaData.getColumnName(col)));
                     rtn.put( metaData.getColumnName(col), rs.getString(metaData.getColumnName(col)));
                 }
+                rows++;
+            } 
+            //System.out.println("tm 244 filas "+rows);
+            if(rows == 0){
+                //System.out.println("tm 246 no va ser que entre aquí ");
+                rtn.clear();
             }
         } //fin deleteRegister
         catch (SQLException ex) {
@@ -184,19 +267,55 @@ public class tableModel {
         ResultSet rs;
         String sql;
         sql = "SELECT MAX("+this.tableKeys.get(0)+") as id FROM "+this.tableName;
+        //System.out.println("sql "+sql);
         try {
             rs = conexion.ejecuteSQL(sql); //Esto devuelve un ResultSet
+            
             ResultSetMetaData metaData = rs.getMetaData();
             int colCount = metaData.getColumnCount();
-            while(rs.next()){ 
+            //System.out.println("rs size "+colCount);
+            if(rs.next()){ 
                 rtn = rs.getInt("id");
-            }   
+                //System.out.println("while ");
+                //System.out.println("rtn "+rtn);
+            } else{
+                rtn = 0;
+            }
+                
         } //fin deleteRegister
         catch (SQLException ex) {
             Logger.getLogger(tableModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         return rtn;
     }
+    
+    public String getMaxIdString(){
+        String rtn = new String();
+        ResultSet rs;
+        String sql;
+        sql = "SELECT MAX("+this.tableKeys.get(0)+") as id FROM "+this.tableName;
+        //System.out.println("sql "+sql);
+        try {
+            rs = conexion.ejecuteSQL(sql); //Esto devuelve un ResultSet
+            
+            ResultSetMetaData metaData = rs.getMetaData();
+            int colCount = metaData.getColumnCount();
+            //System.out.println("rs size "+colCount);
+            if(rs.next()){ 
+                rtn = rs.getString("id");
+                //System.out.println("while ");
+                //System.out.println("rtn "+rtn);
+            } else{
+                rtn = "Vacio";
+            }
+                
+        } //fin deleteRegister
+        catch (SQLException ex) {
+            Logger.getLogger(tableModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rtn;
+    }
+    
     
     /*=======================MÉTODOS PARA CREAR LISTAS=========================*/
     public String createKeyListString(ArrayList<String> columnNames){
@@ -227,6 +346,7 @@ public class tableModel {
             for (Map.Entry<String, String> entry : whereClause.entrySet()) {
                 String key = entry.getKey();
                 String value = entry.getValue();
+                
                 rtn += matchValueType(key, value);
                 if(row < rows){
                     rtn += " "+separator+" ";
@@ -319,7 +439,8 @@ public class tableModel {
         if(position.equalsIgnoreCase("LAST")){
             sql += " ORDER BY "+this.tableKeys.get(0)+" DESC";
         }
-        sql += " LIMIT 1 "; 
+        sql += " LIMIT 1 ";
+        //System.out.println("SQL = "+sql);
         return sql;
     }//fin createDeletetSQL
     
@@ -334,29 +455,40 @@ public class tableModel {
             fieldType = this.columnTypes.get(index);
             switch (fieldType) {
                 case "int":
-                  value = (value.equals(""))? "0": value;
-                  rtn = key + match + value;
-                  break;
+                    value = (value.equals(""))? "0": value;
+                    rtn = key + match + value;
+                    break;
+                case "bigint":
+                    value = (value.equals(""))? "0": value;
+                    rtn = key + match + value;
+                    break;
                 case "integer":
                     value = (value.equals(""))? "0": value;
-                  rtn = key + match + value;
-                  break;
+                    rtn = key + match + value;
+                    break;
+                case "decimal":
+                    value = (value.equals(""))? "0": value;
+                    rtn = key + match + value;
+                    break;
                 case "double precision":
                     value = (value.equals(""))? "0": value;
                     rtn = key + match + value;
-                  break;
+                    break;
                 case "date":
-                  rtn = key + match + "'"+ value+"'";
-                  break;
+                    rtn = key + match + "'"+ value+"'";
+                    break;
                 case "varchar":
-                  rtn = key + match + "'"+ value+"'";
-                  break;
+                    rtn = key + match + "'"+ value+"'";
+                    break;
                 case "timestamp":
-                  rtn = key + match + "'"+ value+"'";
-                  break;
+                    rtn = key + match + "'"+ value+"'";
+                    break;
+                case "datetime":
+                    rtn = key + match + "'"+ value+"'";
+                    break;
                 case "character varying":
-                  rtn = key + match + "'"+ value+"'";
-                  break;
+                    rtn = key + match + "'"+ value+"'";
+                    break;
             }//end swich
         }//end if
         return rtn;
@@ -453,30 +585,71 @@ public class tableModel {
         if(this.columnNames.contains(key)){
             index = this.columnNames.indexOf(key);
             fieldType = this.columnTypes.get(index);
+            //System.out.println("clave "+key+" valor "+value+" tipo "+fieldType);
             switch (fieldType) {
                 case "int":
                     rtn = (value.equals(""))? "0": value;
                     break;
+                case "bigint":
+                    rtn = (value.equals(""))? "0": value;
+                    break;
                 case "integer":
                     rtn = (value.equals(""))? "0": value;
-                  break;
+                    break;
+                case "decimal":
+                    rtn = (value.equals(""))? "0": value;
+                    break;
                 case "double precision":
                     rtn = (value.equals(""))? "0": value;
-                  break;
+                    break;
                 case "date":
-                  rtn = "'"+ value+"'";
-                  break;
+                    rtn = "'"+ value+"'";
+                    break;
                 case "varchar":
-                  rtn = "'"+ value+"'";
-                  break;
+                    rtn = "'"+ value+"'";
+                    break;
                 case "timestamp":
-                  rtn = "'"+ value+"'";
-                  break;
+                    rtn = "'"+ value+"'";
+                    break;
+                case "datetime":
+                    rtn = "'"+ value+"'";
+                    break;
                 case "character varying":
-                  rtn = "'"+ value+"'";
-                  break;
+                    rtn = "'"+ value+"'";
+                    break;
             }//end swich
         }//end if
         return rtn;
     }//end matchKeyValue
+    
+    /***
+     * Método verica que solo queden aquellas claves del Map que se corresponden con los campos
+     * de la tabla de la bd. Puede pedirse sólo las prímary key
+     * @param myMap Map que se envía desde la vista, puede tener claves extras 
+     * @return rtn Map de claves que son iguales a los campos de la tabla. 
+     * Puede que no sea la totalidad de los capos.
+     */
+    public Map<String, String> justTableFields(Map<String, String> myMap, boolean justPrimayKeys){
+        Map<String, String> rtn;
+        rtn = new HashMap<String, String>();
+        for (Map.Entry<String, String> entry : myMap.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            if(this.columnNames.contains(key)){
+                if(justPrimayKeys && this.tableKeys.contains(key)){                 
+                    rtn.put(key, value);
+                    continue;
+                }else{
+                    rtn.put(key, value);
+                }
+            }else{
+                continue;
+            } 
+        }  
+        return rtn;
+    }
+
+    public int updateRegister(Map<String, String> fieldsValues, Map<String, String> keysValues) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }//fin tableModle

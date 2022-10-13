@@ -5,6 +5,8 @@
  */
 package vistas;
 
+import controlador.tableController;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
@@ -47,12 +49,15 @@ private String msg;
 //        });
     }
     private void setData(){
-        myData.put("id_cargo",tf_cargo.getText());
+        myData.put("id_cargo",tf_id.getText());
         myData.put("descripcion",tf_descripcion.getText() );
     }
     private void resetData(){
         myData.put("id_cargo","0");
         myData.put("descripcion","");
+        
+        tf_id.setText("0");
+        tf_descripcion.setText("");
     }
        
     private void fillView(Map<String, String> data){
@@ -61,7 +66,7 @@ private String msg;
             String value = entry.getValue();
             switch(key){
                 case"id_cargo":
-                    tf_cargo.setText(value);
+                    tf_id.setText(value);
                     break;
                 case "descripcion":
                     tf_descripcion.setText(value);
@@ -83,7 +88,7 @@ private String msg;
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        tf_cargo = new javax.swing.JTextField();
+        tf_id = new javax.swing.JTextField();
         tf_descripcion = new javax.swing.JTextField();
 
         setClosable(true);
@@ -95,22 +100,28 @@ private String msg;
 
         jLabel2.setText("DESCRIPCION");
 
-        tf_cargo.addFocusListener(new java.awt.event.FocusAdapter() {
+        tf_id.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                tf_cargoFocusGained(evt);
+                tf_idFocusGained(evt);
             }
             public void focusLost(java.awt.event.FocusEvent evt) {
-                tf_cargoFocusLost(evt);
+                tf_idFocusLost(evt);
             }
         });
-        tf_cargo.addActionListener(new java.awt.event.ActionListener() {
+        tf_id.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tf_cargoActionPerformed(evt);
+                tf_idActionPerformed(evt);
             }
         });
-        tf_cargo.addKeyListener(new java.awt.event.KeyAdapter() {
+        tf_id.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                tf_cargoKeyTyped(evt);
+                tf_idKeyTyped(evt);
+            }
+        });
+
+        tf_descripcion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tf_descripcionActionPerformed(evt);
             }
         });
 
@@ -125,7 +136,7 @@ private String msg;
                     .addComponent(jLabel1))
                 .addGap(52, 52, 52)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(tf_cargo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tf_id, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tf_descripcion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
@@ -135,7 +146,7 @@ private String msg;
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(tf_cargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tf_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tf_descripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -157,36 +168,40 @@ private String msg;
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tf_cargoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_cargoFocusGained
+    private void tf_idFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_idFocusGained
         // TODO add your handling code here:
         this.currentField = "id_cargo";
-        this.tf_cargo.selectAll();
-    }//GEN-LAST:event_tf_cargoFocusGained
+        this.tf_id.selectAll();
+    }//GEN-LAST:event_tf_idFocusGained
 
-    private void tf_cargoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_cargoFocusLost
+    private void tf_idFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_idFocusLost
         // TODO add your handling code here:
         this.currentField = "id_cargo";
-    }//GEN-LAST:event_tf_cargoFocusLost
+    }//GEN-LAST:event_tf_idFocusLost
 
-    private void tf_cargoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_cargoKeyTyped
+    private void tf_idKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_idKeyTyped
 
         if (evt.getKeyChar()=='\n') {
             this.imBuscar();
         }
         // TODO add your handling code here:
-    }//GEN-LAST:event_tf_cargoKeyTyped
+    }//GEN-LAST:event_tf_idKeyTyped
 
-    private void tf_cargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_cargoActionPerformed
+    private void tf_idActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_idActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tf_cargoActionPerformed
+    }//GEN-LAST:event_tf_idActionPerformed
+
+    private void tf_descripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_descripcionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tf_descripcionActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField tf_cargo;
     private javax.swing.JTextField tf_descripcion;
+    private javax.swing.JTextField tf_id;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -196,69 +211,82 @@ private String msg;
 
     @Override
     public void imGrabar() {
-        int id, rows = 0;
-        id = Integer.parseInt(tf_cargo.getText());
-        if(id>0){
-            this.imActualizar();
-            return;
-            
+        
+           int id,rows = 0;
+        id = Integer.parseInt(tf_id.getText());
+        if (id>0){
+        this.imActualizar();
+       
+        return;
         }
         this.setData();
         rows = this.tc.createReg(this.myData);
         this.fillView(myData);
+        String msg = "SE CREÓ EL NUEVO REGISTRO: "+tf_id.getText();
+            System.out.println(msg);
+            JOptionPane.showMessageDialog(this, msg, "ATENCIÓN...!", JOptionPane.OK_OPTION);
     }
-
     @Override
     public void imActualizar() {
-
-        System.out.println("V imActualizar");
+ System.out.println("V imActualizar");
         this.setData();
-        int rows = this.tc.updateReg(myData);
-        this.resetData();
-        this.fillView(myData);
+        ArrayList<Map<String,String>> alCabecera;         //Declara array de Map, cada Map es para un registro
+        alCabecera = new ArrayList<Map<String,String>>(); //Instancia array
+        alCabecera.add(myData);                           //agrega el Map al array, para la cabecera será el mejor de los casos, es decir 1 registro 
+       int rowsAffected = this.tc.updateReg(alCabecera); //Está guardando igual si en el detalle hay error
+        String msg = "SE HA ACTUALIZADO EXITOSAMENTE EL REGISTRO: "+tf_id.getText();
+            System.out.println(msg);
+            JOptionPane.showMessageDialog(this, msg, "ATENCIÓN...!", JOptionPane.OK_OPTION);
     }
+    
 
     @Override
     public void imBorrar() {
 
-        this.setData();
-        int rows = this.tc.deleteReg(tf_cargo.getText());
-        if(rows<=0){
-            msg = "No se ha podido eliminar el registro: "+tf_cargo.getText();
+       this.setData();
+        ArrayList<Map<String,String>> alRegister;              //Declara un Array de Map
+        alRegister = new ArrayList<Map<String,String>>();      //Instancia el array
+        alRegister.add(myData);                                //Agregamos el map en el array
+        int b =   this.tc.deleteReg(alRegister);               //Invocamos el método deleteReg del Modelo que procesa un array
+        //int b =   this.tc.deleteReg(tf_id_marca.getText());
+       if(b<=0) {
+            String msg = "NO SE HA PODIDO ELIMINAR EL REGISTRO: "+tf_id.getText();
             System.out.println(msg);
-            JOptionPane.showMessageDialog(this, msg, "¡Atencion...!", JOptionPane.OK_OPTION);
-            
-            
-        }
-        if (rows>0){
-            msg = "EL registro: "+tf_cargo.getText()+" se ha eliminado correctamente";
+            JOptionPane.showMessageDialog(this, msg, "ATENCIÓN...!", JOptionPane.OK_OPTION);
+            return; 
+       }
+       if (b>0){
+            String msg = "EL REGISTRO: "+tf_id.getText()+" SE HA ELIMINADO CORRECTAMENTE";
             System.out.println(msg);
-            JOptionPane.showMessageDialog(this, msg, "¡Atención...!", JOptionPane.YES_OPTION);
-        }
-        this.resetData();
-        this.fillView(myData);
+            JOptionPane.showMessageDialog(this, msg, "ATENCIÓN...!", JOptionPane.OK_OPTION);
+       }
+       this.resetData();
+       this.fillView(myData);
     }
 
     @Override
     public void imNuevo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        resetData();
     }
 
     @Override
     public void imBuscar() {
-        this.setData();
-        //Aqui podriamos verificar que tfid no sea cero
-        this.myData = this.tc.searchById(this.myData);
-        //también aqui se podría verificar que traiga los datos, sino invocar resteData  antes del fill
+    this.setData();
+        myData = tc.searchById(this.myData);
+        if(this.myData.size() <=0){
+            String msg = "NO SE HA PODIDO RECUPERAR EL REGISTRO: "+tf_id.getText();
+            this.resetData();
+            JOptionPane.showMessageDialog(this, msg, "ATENCIÓN...!", JOptionPane.OK_OPTION);
+        }
         this.fillView(myData);
-             
+        System.out.println("V imBuscar myData: "+myData.toString());
     }
 
     @Override
     public void imPrimero() {
         this.setData();
         //en este caso el id no importa, pero se pasa para tener unificado el formato
-        this.myData = this.tc.navegationReg(tf_cargo.getText(),"FIRST");
+        this.myData = this.tc.navegationReg(tf_id.getText(),"FIRST");
         this.fillView(this.myData);
     }
 
@@ -266,7 +294,7 @@ private String msg;
     public void imSiguiente() {
         this.setData();
         //en este caso el id SI importa
-        this.myData = this.tc.navegationReg(tf_cargo.getText(),"NEXT");
+        this.myData = this.tc.navegationReg(tf_id.getText(),"NEXT");
         this.fillView(this.myData);
     }
 
@@ -274,15 +302,23 @@ private String msg;
     public void imAnterior() {
         this.setData();
         //en este caso el id SI importa
-        this.myData = this.tc.navegationReg(tf_cargo.getText(),"PRIOR");
+        this.myData = this.tc.navegationReg(tf_id.getText(),"PRIOR");
         this.fillView(this.myData);
     }
 
     @Override
     public void imUltimo() {
-        this.setData();
-        //en este caso el id no importa, pero se pasa para tener unificado el formato
-        this.myData = this.tc.navegationReg(tf_cargo.getText(),"LAST");
+         this.setData();
+        this.myData = this.tc.navegationReg(tf_id.getText(), "LAST");
+        
+        Map<String,String> where = new HashMap<String,String>(); // por cual campo buscar los registros
+      
+        //Los campos que vamos a recuperar
+        Map<String,String> fields = new HashMap<String,String>();
+        fields.put("*", "*");
+        
+       
+        
         this.fillView(this.myData);
     }
 
@@ -325,7 +361,7 @@ private String msg;
                 sql = "SELECT id_cargo AS codigo, descripcion " +
                         "FROM cargo "+
                         "WHERE descripcion LIKE '%";
-                this.idObj = tf_cargo;
+                this.idObj = tf_id;
                 break;
         }
         frame = new w_buscar (sql, this.idObj);

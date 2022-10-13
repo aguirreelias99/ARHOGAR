@@ -47,22 +47,22 @@ public class ModeloTabla extends DefaultTableModel{
     }
 
  
-    public boolean isCellEditable (int row, int column){
-        //Definimos si una celda puede ser o no editable
-       /* if (column!=Utilidades.PERFIL && column!=Utilidades.EVENTO && column!=Utilidades.NOTA1 && column!=Utilidades.NOTA2 && column!=Utilidades.NOTA3){   
+   //public boolean isCellEditable (int row, int column){
+       // Definimos si una celda puede ser o no editable
+       /*if (column!=Utilidades.PERFIL && column!=Utilidades.EVENTO && column!=Utilidades.NOTA1 && column!=Utilidades.NOTA2 && column!=Utilidades.NOTA3){   
            return false; 
         }else{
            return true;
         }*/
-        boolean rtn = true;
+       /* boolean rtn = true;
         for(int i = 0; i < this.noEditable.size(); i++){
             if(column == this.noEditable.get(i)){
                 rtn = false;
             }
         }
         
-        return rtn;
-    }
+        return rtn;*/
+   // }
     
     @Override
     public void addRow(Object[] rowData) {

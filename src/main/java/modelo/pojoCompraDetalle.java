@@ -16,7 +16,7 @@ public class pojoCompraDetalle {
     private int compraid;
     private String cod_barra;
     private String descripcion;
-    private double precio;
+    private double precio_neto;
     private double cantidad;
     private double descuento;
     private double bonificado;
@@ -28,12 +28,12 @@ public class pojoCompraDetalle {
     }
 
     public pojoCompraDetalle(int compraid, String cod_barra, String descripcion, 
-            double precio, double cantidad, double descuento, double bonificado, double total) {
+            double precio_neto, double cantidad, double descuento, double bonificado, double total) {
             super();
             this.compraid = compraid;
             this.cod_barra = cod_barra;
             this.descripcion = descripcion;
-            this.precio = precio;
+            this.precio_neto = precio_neto;
             this.cantidad = cantidad;
             this.descuento = descuento;
             this.bonificado = bonificado;
@@ -66,8 +66,8 @@ public class pojoCompraDetalle {
 
     public double getDouble(String arg){
         switch(arg){
-            case "precio" :
-                return this.precio;
+            case "precio_neto" :
+                return this.precio_neto;
                 //break;
             case "cantidad" :
                 return this.cantidad;
@@ -108,8 +108,8 @@ public class pojoCompraDetalle {
 
     public void setDouble(String attribute, double value){
         switch(attribute){
-            case "precio" :
-                this.precio = value;
+            case "precio_neto" :
+                this.precio_neto = value;
                 //break;
             case "cantidad" :
                 this.cantidad = value;
