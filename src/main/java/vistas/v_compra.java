@@ -1527,6 +1527,7 @@ import javax.swing.table.JTableHeader;
         //Recorre el detalle y guarda cada fila
         //columndata ya se procesó con el metodo setTotalGral
         this.setTotalGral();
+        //github
         //Recorre el detalle y guarda cada fila
         //columndata ya se procesó con el metodo setTotalGral
         System.out.println("myData "+myData);
